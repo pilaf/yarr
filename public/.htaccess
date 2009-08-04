@@ -1,0 +1,27 @@
+RewriteEngine On
+
+RewriteCond %{HTTP_HOST}  !(^gyro$) [NC]
+RewriteRule ^(.*)$  http://gyro/$1 [R=301,L]
+
+# Redirect all URLs with "case_studies" (underscored) to "case-studies" (dashed)
+RewriteRule ^case_studies$       /case-studies [R=301,L]
+RewriteRule ^case_studies/(.*)$  /case-studies/$1 [R=301,L]
+RewriteRule ^disciplines/(.+)/case_studies$  /disciplines/$1/case-studies [R=301,L]
+RewriteRule ^industries/(.+)/case_studies$   /industries/$1/case-studies [R=301,L]
+RewriteRule ^clients/(.+)/case_studies$      /clients/$1/case-studies [R=301,L]
+
+# Redirect all URLs with "news" to "news-and-press"
+RewriteRule ^news$       /news-and-press [R=301,L]
+RewriteRule ^news/(.*)$  /news-and-press/$1 [R=301,L]
+RewriteRule ^clients/(.+)/news$          /clients/$1/news-and-press [R=301,L]
+RewriteRule ^news_categories/(.+)/news$  /news-categories/$1/news-and-press [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI}  !/dispatch.php$
+RewriteRule ^(.*)$    dispatch.php    [QSA,L]
+
+#AuthName "Gyro Dev"
+#AuthType Basic
+#AuthUserFile /var/www/gyrodev/.htpasswd
+#AuthGroupFile /dev/null
+#require valid-user

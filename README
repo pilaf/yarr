@@ -1,0 +1,42 @@
+  __  __  ____    _ ___  _ ___
+ / / / / .__  |  / '___]/ '___]
+ \ \/ / / __  / / /    / /
+ _>  / |_____/ /_/    /_/
+[__.'yet another rails ripoff
+
+YARR - Yet Another Rails Ripoff
+===============================
+
+YARR (pronounced in a piratey voice) is an attempt to make PHP slightly less painful for a Rails zealot (sadly, you don't always get a choice).
+
+Still *heavily* incomplete and experimental and with no documentation whatsoever, I do not recommend anyone to use this for anything serious.
+
+WARNING: It may contain coding styles that could be considered offensive by long-time PHP coders.
+
+Features
+========
+
+- ActiveRecord implementation with associations (not yet finished)
+
+TODO List
+=========
+
+- Rewrite controllers and router
+- REST routes
+- Generators
+- PHP-based HTTP server (for Rails-like 'script/server' with interactive debugging)
+- Plugins
+- ActiveRecord validations
+- Tests
+- Documentation
+
+Requirements
+============
+
+PHP >=5.1
+
+Credits and Licence
+===================
+
+Author: Pedro Fayolle (a.k.a. Pilaf)
+Licence: BSD
