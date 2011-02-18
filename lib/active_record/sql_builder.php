@@ -115,11 +115,11 @@ abstract class SqlBuilder extends DatabaseConnector
 	
 	static function add_sql_trail(&$sql, &$options)
 	{
-		self::add_joins($sql, $options['joins']);
-		self::add_conditions($sql, $options['conditions']);
-		self::add_group($sql, $options['group'], $options['having']);
-		self::add_order($sql, $options['order']);
-		self::add_limit($sql, $options['limit'], $options['offset']);
+		self::add_joins($sql, @$options['joins']);
+		self::add_conditions($sql, @$options['conditions']);
+		self::add_group($sql, @$options['group'], @$options['having']);
+		self::add_order($sql, @$options['order']);
+		self::add_limit($sql, @$options['limit'], @$options['offset']);
 	}
 	
 	/*
@@ -162,7 +162,7 @@ abstract class SqlBuilder extends DatabaseConnector
 	{
 		if (is_array($conditions) && !empty($conditions)) {
 			if (isset($conditions[0])) {
-				return call_user_func_array(array(self, 'sanitize_sql'), $conditions);
+				return call_user_func_array(array('self', 'sanitize_sql'), $conditions);
 			} else {
 				return self::sanitize_sql_assoc($conditions);
 			}

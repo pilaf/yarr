@@ -60,6 +60,13 @@ class Routes
 		array_shift(self::$routes);
 		return false;
 	}
+
+  static function print_routes()
+  {
+    foreach (self::$routes as $route) {
+      echo $route->inspect() . "\n";
+    }
+  }
 	
 	/*
 	static private function reset_routes_pointer()

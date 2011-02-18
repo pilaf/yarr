@@ -64,6 +64,8 @@ class Route
 			} else if ($this->segment_is_catchall($segment)) {
 				
 				$match_params[$this->segment_name($segment)] = $path_segments;
+
+				$path_segments = array();
 				
 				break;
 				
@@ -72,6 +74,11 @@ class Route
 				return false;
 				
 			}
+		}
+
+		// Make sure we looked at all the segments in the path
+		if (!empty($path_segments)) {
+			return false;
 		}
 		
 		return $this->merge_with_defaults($match_params);
@@ -133,6 +140,11 @@ class Route
 		}
 		
 		return empty($path) ? '/' : $path;
+	}
+
+	function inspect()
+	{
+		return '/' . $this->mask;
 	}
 	
 	/*
@@ -273,13 +285,15 @@ class Route
 	
 	private function initialize_has_catchall()
 	{
-		$this->has_catchall = $this->segments[count($this->segments)-1][0] == '*';
+		$this->has_catchall = (count($this->segments) > 1) ? ($this->segments[count($this->segments)-1][0] == '*') : false;
 	}
 	
 	private function initialize_named_segments()
 	{
 		foreach ($this->segments as $index => $value) {
-			if ($value[0] != '*' && $value[0] != ':') {
+      if ($value === '') {
+        throw new Exception("Empty segment in route {$this->mask}.");
+      } if ($value[0] != '*' && $value[0] != ':') {
 				$this->named_segments[] = null;
 				$this->first_named_segment_position = $index + 1;
 			} else {

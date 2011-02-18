@@ -17,7 +17,7 @@ class Logger
 	
 	public static function open($log_file)
 	{
-		if ($file_handle) self::close();
+		if (isset(self::$file_handle) && self::$file_handle) self::close();
 		
 		self::$file_handle = fopen($log_file, 'a');
 	}

@@ -41,7 +41,7 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 		$this->set_attributes($attributes);
 	}
 	
-	protected function __set($name, $value)
+	function __set($name, $value)
 	{
 		if ('id' == $name) return $this->set_id($value);
 		
@@ -70,7 +70,7 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 		}
 	}
 	
-	protected function __get($name)
+	function __get($name)
 	{
 		if ('id' == $name) return $this->get_id();
 		
@@ -89,13 +89,13 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 		//throw new Exception ...
 	}
 	
-	protected function __isset($name)
+	function __isset($name)
 	{
 		// TODO: check this for correctness!
 		return $this->has_attribute($name) || $this->has_association($name);
 	}
 	
-	protected function __call($name, $arguments)
+	function __call($name, $arguments)
 	{
 		if (preg_match('/(build|create)_(\w+)/', $name, $match) && $this->has_association($association_name = Inflector::pluralize($match[2]))) {
 			$association = $this->association_proxy($association_name);
@@ -126,7 +126,7 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 			}
 			
 			// Check if the attribute actually changed
-			if ($force_dirty || !($column->type_cast($this->attributes[$attribute]) === $column->type_cast($value))) {
+			if ($force_dirty || !($column->type_cast(@$this->attributes[$attribute]) === $column->type_cast($value))) {
 				$this->mark_attribute_as_dirty($attribute);
 				$this->attributes[$attribute] = $value;
 			}
@@ -160,7 +160,7 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 		$attributes_protected = $this->attributes_protected();
 		
 		foreach ($attributes as $attribute => $value) {
-			if ($attributes_protected[$attribute]) continue;
+			if (isset($attributes_protected[$attribute]) && $attributes_protected[$attribute]) continue;
 			$this->__set($attribute, $value);
 		}
 	}
@@ -340,7 +340,7 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 	{
 		$options['limit'] = 1;
 		$result = self::find_all($class_name, $options);
-		return $result[0];
+		return isset($result[0]) ? $result[0] : null;
 	}
 	
 	/*
@@ -385,7 +385,7 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 	
 	public static function calculate($class_name, $operation, $column_name, $options = array())
 	{
-		if ($options['select']) {
+		if (isset($options['select']) && $options['select']) {
 			$column_name = $options['select'];
 		}
 		
@@ -697,8 +697,8 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 	{
 		$conditions = '';
 		
-		if ($options['conditions']) {
-			$conditions = ' AND (' . SqlBuilder::sanitize_sql_for_conditions($options['conditions']) . ')';			                          
+		if (isset($options['conditions'])) {
+			$conditions = ' AND (' . SqlBuilder::sanitize_sql_for_conditions($options['conditions']) . ')';
 		}
 		
 		$primary_key = self::primary_key_for($class_name);
@@ -765,7 +765,7 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 	 */
 	protected static function construct_finder_sql($class_name, &$options)
 	{
-		$sql = 'SELECT ' . (isset($options['select']) ? $options['select'] : self::default_select($class_name, $options['joins'])) . ' ' .
+		$sql = 'SELECT ' . (isset($options['select']) ? $options['select'] : self::default_select($class_name, @$options['joins'])) . ' ' .
 		       'FROM '   . (isset($options['from'])   ? $options['from']   : self::quoted_table_name($class_name));
 		
 		SqlBuilder::add_sql_trail($sql, $options);
@@ -795,8 +795,8 @@ abstract class ActiveRecord extends ActiveRecordBasePublicInstanceMethods
 			case 'count': return (int)$value;
 			// Ruby code to port:
 			//when 'sum'   then type_cast_using_column(value || '0', column)
-            //when 'avg'   then value && (value.is_a?(Fixnum) ? value.to_f : value).to_d
-            default:      return $column ? $column->type_cast($value) : $value;
+			//when 'avg'   then value && (value.is_a?(Fixnum) ? value.to_f : value).to_d
+			default:      return $column ? $column->type_cast($value) : $value;
 		}
 	}
 	

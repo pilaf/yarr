@@ -16,5 +16,5 @@ function set_content_for($section)
 
 function content_for($section)
 {
-	return $GLOBALS['CONTENT_SECTIONS'][$section];
+	return @$GLOBALS['CONTENT_SECTIONS'][$section];
 }

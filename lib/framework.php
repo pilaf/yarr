@@ -11,7 +11,7 @@ define('YARR_PUBLIC_PATH', YARR_ROOT . '/public');
 define('DATE_SHORT', 'Y-m-d');
 define('DATE_LONG', 'B e, Y');
 define('DATE_DB', 'Y-m-d');
-define('DATE_DB', 'Ymd');
+//define('DATE_DB', 'Ymd');
 
 define('TIME_SHORT', 'H:i:s');
 
@@ -181,20 +181,24 @@ class YARR
 	
 	static private function initialize_php_environment()
 	{
-		/*
-		 * Disable output buffering (this is handled manually by the dispatcher)
-		 */
-		ob_end_clean();
-		
-		/*
-		 * Get rid of nasty magic quotes slashes
-		 */
-		self::clear_magic_quotes();
-		
-		/*
-		 * Start browser session
-		 */
-		session_start();
+    // Check if we're in command line mode and avoid doing
+    // HTTP-specific maintenance
+    if (php_sapi_name() != 'cli') {
+      /*
+       * Disable output buffering (this is handled manually by the dispatcher)
+       */
+      ob_end_clean();
+      
+      /*
+       * Get rid of nasty magic quotes slashes
+       */
+      self::clear_magic_quotes();
+      
+      /*
+       * Start browser session
+       */
+      session_start();
+    }
 	}
 	
 	/*

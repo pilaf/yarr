@@ -21,12 +21,12 @@ class Template
 		$this->flash = &$controller->flash;
 	}
 	
-	private function __get($name)
+	function __get($name)
 	{
 		return $this->properties[$name];
 	}
 	
-	private function __isset($name)
+	function __isset($name)
 	{
 		return isset($this->properties[$name]);
 	}
@@ -102,7 +102,7 @@ class Template
 	
 	private function render_with_layout()
 	{
-		$template_filename = $this->get_template_filename($options);
+		$template_filename = $this->get_template_filename();
 		
 		$content = $this->render_file($template_filename);
 		

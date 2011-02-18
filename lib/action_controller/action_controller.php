@@ -103,17 +103,17 @@ abstract class ActionController
 		//$this->params = $params;
 	}
 	
-	private function __set($name, $value)
+	function __set($name, $value)
 	{
 		return $this->properties[$name] = $value;
 	}
 	
-	private function __get($name)
+	function __get($name)
 	{
-		return $this->properties[$name];
+		return @$this->properties[$name];
 	}
 	
-	private function __isset($name)
+	function __isset($name)
 	{
 		return isset($this->properties[$name]);
 	}

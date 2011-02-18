@@ -15,8 +15,8 @@ class MysqliAdapter extends DatabaseAdapter
 			$options['username'],
 			$options['password'],
 			$options['database'],
-			$options['port'],
-			$options['socket']
+			@$options['port'],
+			@$options['socket']
 		);
 	}
 	
